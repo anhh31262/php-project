@@ -1,4 +1,6 @@
-
+<?php
+$this->fileLayout = "LayoutTrangTrong.php";
+?>
 <div class="container" style="margin-top: 20px; background: white; border: 2px solid #e1e0e0; margin-bottom: 20px;">
 
   <h1 style="font-size: 27px;text-align: center;

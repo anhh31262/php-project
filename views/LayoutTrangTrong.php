@@ -135,29 +135,44 @@
                 </script>
 
                 <ul class="navbar-nav mb-1 ml-auto">
+                    <?php if (isset($_SESSION['customer_email'])) : ?>
                         <div class="dropdown" style="margin-top: 6px;">
                             <li class="nav-item account" type="button" class="btn dropdown" data-toggle="dropdown">
                                 <a href="#" class="btn btn-secondary rounded-circle">
                                     <i class="fa fa-user"></i>
                                 </a>
-                                    <a style="color: #343a40!important; font-size: 15px;" href="#">
+                                <?php if (isset($_SESSION['customer_email'])) : ?>
+                                    <a style="color: #343a40!important; font-size: 15px;" href="#"><?php echo $_SESSION['customer_name']; ?>
+                                    <?php else : ?>
                                         <a class="nav-link text-dark text-uppercase" href="#" style="display:inline-block">Tài
                                             khoản</a>
+                                    <?php endif; ?>
                             </li>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <?php if (isset($_SESSION['customer_email'])) : ?>
                                     <a href="index.php?controller=account&action=logout" class="dropdown-item nutdangxuat text-center">Đăng xuất</a>
-                                    <a class="dropdown-item nutdangnhap text-center" style="margin-bottom: 10px;" href="">Đăng nhập</a><a class="dropdown-item nutdangky text-center mb-2" href="index.php?controller=account&action=register">Đăng ký</a>
+                                <?php else : ?>
+                                    <a class="dropdown-item nutdangnhap text-center" style="margin-bottom: 10px;" href="index.php?controller=account&action=login">Đăng nhập</a><a class="dropdown-item nutdangky text-center mb-2" href="index.php?controller=account&action=register">Đăng ký</a>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <li class="nav-item giohang">
                             <a href="index.php?controller=cart" class="btn btn-secondary rounded-circle" style="margin-right: 2px;">
                                 <i class="fa fa-shopping-cart"></i>
-                               
-                                <div class="cart-amount"></div>
+                                <?php
+                                $ProductNumberInCart = 0;
+                                if (isset($_SESSION['cart']) != NULL)
+                                    foreach ($_SESSION['cart'] as $product)
+                                        $ProductNumberInCart++;
+                                else
+                                    $ProductNumberInCart = 0;
+                                ?>
+                                <div class="cart-amount"><?php echo $ProductNumberInCart; ?></div>
                             </a>
                             <a class="nav-link text-dark giohang text-uppercase" href="index.php?controller=cart" style="display:inline-block">Giỏ
                                 Hàng</a>
                         </li>
+                    <?php else : ?>
                         <div class="dropdown">
                             <li class="nav-item account" type="button" class="btn dropdown" data-toggle="dropdown">
                                 <a href="#" class="btn btn-secondary rounded-circle">
@@ -173,12 +188,20 @@
                         <li class="nav-item giohang">
                             <a href="index.php?controller=cart" class="btn btn-secondary rounded-circle" style="margin-right: 2px;">
                                 <i class="fa fa-shopping-cart"></i>
-                                
-                                <div class="cart-amount"></div>
+                                <?php
+                                $ProductNumberInCart = 0;
+                                if (isset($_SESSION['cart']) != NULL)
+                                    foreach ($_SESSION['cart'] as $product)
+                                        $ProductNumberInCart++;
+                                else
+                                    $ProductNumberInCart = 0;
+                                ?>
+                                <div class="cart-amount"><?php echo $ProductNumberInCart; ?></div>
                             </a>
                             <a class="nav-link text-dark giohang text-uppercase" href="index.php?controller=cart" style="display:inline-block">Giỏ
                                 Hàng</a>
                         </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
@@ -195,20 +218,33 @@
                         </div>
                         <div class="categorycontent">
                             <ul>
-                                
-                              
-                                    <li><a href="index.php?controller=products&action=category&id="></a>
+                                <?php
+                                $conn = Connection::getInstance();
+                                $query = $conn->query("select * from categories where parent_id = 0 order by id desc");
+                                $categories = $query->fetchAll();
+                                ?>
+                                <?php foreach ($categories as $rows) : ?>
+                                    <li><a href="index.php?controller=products&action=category&id=<?php echo $rows->id; ?>"><?php echo $rows->name; ?></a>
                                         <i class="fa fa-chevron-right float-right"></i>
                                         <ul>
-                                            
-                                            <li class="liheader"><a href="index.php?controller=products&action=category&id=" class="header text-uppercase"></a></li>
-                                           
-                                           
+                                            <?php
+                                            $conn = Connection::getInstance();
+                                            $query = $conn->query("select * from categories order by id desc");
+                                            $categories = $query->fetchAll();
+                                            ?>
+                                            <li class="liheader"><a href="index.php?controller=products&action=category&id=<?php echo $rows->id; ?>" class="header text-uppercase"><?php echo $rows->name; ?></a></li>
+                                            <?php
+                                            $querySub = $conn->query("select * from categories where parent_id = {$rows->id} order by id desc");
+                                            $categoriesSub = $querySub->fetchAll();
+                                            ?>
+                                            <?php foreach ($categoriesSub as $rowsSub) : ?>
                                                 <div class="content trai" style="height: 35px;">
-                                                    <li><a href="index.php?controller=products&action=category&id="><</a></li>
+                                                    <li><a href="index.php?controller=products&action=category&id=<?php echo $rowsSub->id; ?>"><?php echo $rowsSub->name ?></a></li>
                                                 </div>
+                                            <?php endforeach; ?>
                                         </ul>
                                     </li>
+                                <?php endforeach; ?>
                             </ul>
                         </div>
                     </div>
@@ -229,6 +265,7 @@
 
 
 
+    <?php echo $this->view; ?>
 
     <section class="abovefooter text-white" style="background-color: #ae7b4e;">
         <div class="container">
