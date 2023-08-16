@@ -1,12 +1,16 @@
+<?php
+$this->fileLayout = "LayoutTrangTrong.php";
+?>
 
 <div class="container" style="margin-top: 20px; background: white;border: 2px solid #e1e0e0; margin-bottom: 20px;">
     <div class="template-customer">
         <h1 style="font-size: 27px;text-align: center;
     margin-top: 20px; color:#ae7b4e;">ĐĂNG KÝ TÀI KHOẢN</h1>
         <p style="text-align: center;">Đăng ký tài khoản để nhận những ưu đãi hấp dẫn nhé!</p style="text-align: center;">
-       
+        <?php if (isset($_GET["notify"]) && $_GET["notify"] == "error") : ?>
             <p style="color:red;">Đăng ký chưa thành công, bạn hãy kiểm tra lại thông tin!</p>
 
+        <?php endif; ?>
 
         <div class="modal-body" style="text-align: center; margin: 0 160px;">
             <form id="form-signup" class="form-signin mt-2" novalidate="novalidate" method='post' action="index.php?controller=account&action=registerPost">

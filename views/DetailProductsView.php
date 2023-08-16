@@ -1,13 +1,21 @@
-
+<?php
+$this->fileLayout = "LayoutTrangTrong.php";
+?>
 <section class="breadcrumbbar">
     <div class="container">
         <ol class="breadcrumb mb-0 p-0 bg-transparent">
-            <li class="breadcrumb-item"><a href="">Trang chủ</a></li>
-            <li class="breadcrumb-item"><a href="">
-                  
+            <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="index.php?controller=products&action=category&id=<?php echo $record->category_id; ?>">
+                    <?php
+                    $category = $this->modelGetCategory($record->category_id);
+                    echo isset($category->name) ? $category->name : "";
+                    ?>
                 </a></li>
             <li class="breadcrumb-item active"><a href="#">
-                   
+                    <?php
+                    $product = $this->modelGetProduct($id);
+                    echo isset($product->name) ? $product->name : "";
+                    ?>
                 </a></li>
         </ol>
     </div>
@@ -24,14 +32,14 @@
                         </a>
                     </div>
                     <div class="list-anhchitiet d-flex mb-4" style="margin-left: 2rem;">
-                        <img class="thumb-img thumb1 mr-3" src="" alt="">
-                        <img class="thumb-img thumb2 vienvang" src=">" alt="">
+                        <img class="thumb-img thumb1 mr-3" src="assets/upload/products/<?php echo $record->photo; ?>" alt="<?php echo $record->name; ?>">
+                        <img class="thumb-img thumb2 vienvang" src="assets/upload/products/<?php echo $record->photo1; ?>" alt="<?php echo $record->name; ?>">
                     </div>
                 </div>
                 <div class="col-md-7 khoithongtin">
                     <div class="row">
                         <div class="col-md-12 header">
-                            <h4 class="ten"></h4>
+                            <h4 class="ten"><?php echo $record->name; ?></h4>
                             <div class="rate">
                                 <i class="fa fa-star active"></i>
                                 <i class="fa fa-star active"></i>
@@ -43,9 +51,9 @@
                         </div>
                         <div class="col-md-7">
                             <div class="gia">
-                                <div class="giagoc">Giá gốc:<span class="giacu ml-2"> ₫</span></div>
-                                <div class="giaban">Sale chỉ còn: <span class="giamoi font-weight-bold"> ₫</span></div>
-                                <div class="tietkiem">Tiết kiệm: <b>₫</b> 
+                                <div class="giagoc">Giá gốc:<span class="giacu ml-2"><?php echo number_format($record->price); ?> ₫</span></div>
+                                <div class="giaban">Sale chỉ còn: <span class="giamoi font-weight-bold"><?php echo number_format($record->price - ($record->price * $record->discount) / 100); ?> ₫</span></div>
+                                <div class="tietkiem">Tiết kiệm: <b><?php echo number_format($record->price * $record->discount / 100); ?>₫</b> 
                                 </div>
                             </div>
                             <div class="uudai my-3">
@@ -70,7 +78,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a class="chonmua" href="" class="button">
+                            <a class="chonmua" href="index.php?controller=cart&action=create&id=<?php echo $record->id; ?>" class="button">
                                 <div class="nutmua btn w-100 text-uppercase">CHỌN MUA</div>
                             </a>
                             <a class="huongdanmuahang text-decoration-none" href="#">(Vui lòng xem hướng dẫn mua
@@ -93,7 +101,8 @@
                         <h6 class="tieude font-weight-bold">Sản phẩm liên quan</h6>
                         <p>
                             <span>
-                                
+                                <?php echo $record->description; ?>
+                                <?php echo $record->content; ?>
                             </span>
                         </p>
 
@@ -104,27 +113,27 @@
                                 <div class="motthanh d-flex align-items-center">5 <i style="color: #f3ce04;" class="fa fa-star"></i>
                                     <div class="progress mx-2" style="background: #5cb85c;">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div><span style="width: 48px;">  vote</span>
+                                    </div><span style="width: 48px;"> <?php echo $this->modelGetStar($record->id, 5); ?> vote</span>
                                 </div>
                                 <div class="motthanh d-flex align-items-center">4 <i style="color: #f3ce04;" class="fa fa-star"></i>
                                     <div class="progress mx-2" style="background: #5bc0de;">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div><span style="width: 48px;">  vote</span>
+                                    </div><span style="width: 48px;"> <?php echo $this->modelGetStar($record->id, 4); ?> vote</span>
                                 </div>
                                 <div class="motthanh d-flex align-items-center">3 <i style="color: #f3ce04;" class="fa fa-star"></i>
                                     <div class="progress mx-2" style="background: #d9534f;">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div><span style="width: 48px;">  vote</span>
+                                    </div><span style="width: 48px;"> <?php echo $this->modelGetStar($record->id, 3); ?> vote</span>
                                 </div>
                                 <div class="motthanh d-flex align-items-center">2 <i style="color: #f3ce04;" class="fa fa-star"></i>
                                     <div class="progress mx-2" style="background: #f0ad4e;">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div> <span style="width: 48px;"> vote</span>
+                                    </div> <span style="width: 48px;"> <?php echo $this->modelGetStar($record->id, 2); ?> vote</span>
                                 </div>
                                 <div class="motthanh d-flex align-items-center">1 <i style="color: #f3ce04;" class="fa fa-star"></i>
                                     <div class="progress mx-2" style="background: #337ab7;">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div> <span style="width: 48px;">  vote</span>
+                                    </div> <span style="width: 48px;"> <?php echo $this->modelGetStar($record->id, 1); ?> vote</span>
                                 </div>
 
                             </div>

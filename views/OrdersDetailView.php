@@ -1,7 +1,13 @@
-
+<?php 
+	$this->fileLayout = "LayoutTrangTrong.php";
+?>
 <div class="container">
     
-
+<?php 
+        $conn = Connection::getInstance();
+        $query = $conn->query("select * from customers where id = (select customer_id from orders where id = $id limit 0,1)");
+        $customer = $query->fetch();
+  ?>
 <div class="col-md-12">
     <div class="panel panel-default" style="margin-bottom:5px;">
         <div class="panel-heading" style="    margin-top: 30px;
@@ -17,19 +23,19 @@
             <table class="table table-bordered">
                 <tr>
                     <th style="width:150px; background: white;">Họ tên</th>
-                    <td style="background: white;"></td>
+                    <td style="background: white;"><?php echo $customer->name; ?></td>
                 </tr>
                 <tr>
                     <th style="width:150px; background: white;">Email</th>
-                    <td style="background: white;"></td>
+                    <td style="background: white;"><?php echo $customer->email; ?></td>
                 </tr>
                 <tr>
                     <th style="width:150px; background: white;">Địa chỉ</th>
-                    <td style="background: white;"></td>
+                    <td style="background: white;"><?php echo $customer->address; ?></td>
                 </tr>
                 <tr>
                     <th style="width:150px; background: white;">Điện thoại</th>
-                    <td style="background: white;"></td>
+                    <td style="background: white;"><?php echo $customer->phone; ?></td>
                 </tr>
             </table>            
         </div>
@@ -54,16 +60,21 @@
                     <th style="width:80px; background: white;">Price</th>
                     <th style="width:80px; background: white;">Discount</th>
                 </tr>
-               
-                   
+                <?php foreach ($data as $rows): ?>
+                    <?php 
+                        $product = $this->modelGetProduct($rows->product_id);
+                     ?>
                 <tr style="color: black; background: white;">
                     <td>
-                        <img src="" style="width:100px;">
+                        <?php if($product->photo != "" && file_exists("./assets/upload/products/".$product->photo)): ?>
+                        <img src="./assets/upload/products/<?php echo $product->photo; ?>" style="width:100px;">
+                        <?php endif; ?>
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align:center;"></td>
+                    <td><?php echo $product->name; ?></td>
+                    <td><?php echo number_format($product->price); ?></td>
+                    <td style="text-align:center;"><?php echo $product->discount; ?></td>
                 </tr>
+                <?php endforeach; ?>
             </table>
         </div>
     </div>

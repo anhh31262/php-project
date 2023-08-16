@@ -1,3 +1,6 @@
+<?php 
+    $this->fileLayout = "LayoutTrangTrong.php";
+ ?>
 
 
 
@@ -5,7 +8,7 @@
     <div class="container">
         <div>
             <h1 class="header text-uppercase">
-                Giá từ  VNĐ - đến  VNĐ
+                Giá từ <?php echo number_format($fromPrice); ?> VNĐ - đến <?php echo number_format($toPrice); ?> VNĐ
             </h1>
         </div>
 
@@ -44,6 +47,7 @@
                 
                 <div class="items">
                     <div class="row">
+                        <?php foreach($data as $rows): ?>
                             <div class="col-lg-3 col-md-4 col-xs-6 item DeanGraziosi">
                                 <div class="card">
                                     <a href="index.php?controller=products&action=detail&id=<?php echo $rows->id; ?>" class="motsanpham"
@@ -73,6 +77,7 @@
                                     </a>
                                 </div>
                             </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
                 <div class="pagination-bar my-3">
@@ -81,7 +86,9 @@
                             <nav>
                                 <ul class="pagination justify-content-center">
                                     <li class="page-item"><a class="page-link" href="#">Trang</a></li>
+                                    <?php for($i = 1; $i <= $numPage; $i++): ?>
                                         <li class="page-item"><a class="page-link" href="index.php?controller=search&action=name&fromPrice=<?php echo $fromPrice; ?>&toPrice=<?php echo $toPrice; ?>&p=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                    <?php endfor; ?>
                                 </ul>
                             </nav>
                         </div>

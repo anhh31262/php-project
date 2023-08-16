@@ -1,4 +1,6 @@
-
+<?php 
+	$this->fileLayout = "LayoutTrangTrong.php";
+?>
 <section class="account-page my-3">
         <div class="container">
             <div class="page-content bg-white">
@@ -23,15 +25,35 @@
                                         <th>Trạng thái đơn hàng</th>
                                         <th>Chi tiết đơn</th>
                                     </tr>
-                                     
+                                        <?php foreach ($data as $rows): ?>
+                                        <?php
+                                            $customer = $this->modelGetCustomer($rows->customer_id);    
+                                        ?>
                                     <tr>
-
-                                       
+                                        <td><?php echo isset($customer->name)?$customer->name:""; ?></td>
+                                        <td><?php echo isset($customer->address)?$customer->phone:""; ?></td>
+                                        <td><?php echo isset($customer->phone)?$customer->address:""; ?></td>
+                                        <td><?php echo date("d/m/Y",strtotime($rows->date)); ?></td>
+                                        <td><?php echo number_format($rows->price); ?> VNĐ</td>
+                                        <td>
+                                            <?php if($rows->hot == 1 ): ?>
+                                                <div>Đã nhận</div>
+                                            <?php else: ?>
+                                                <?php if($rows->status == 1): ?>
+                                                <div>Đã giao hàng</div>
+                                                <?php else: ?>
+                                                <div>Chưa giao hàng</div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </td>
                                         <td style="text-align:center;">
-                                                    <a href="index.php?controller=orders&action=delivery1&id=">Đã nhận</a>
+                                                <?php if($rows->hot == 0): ?>
+                                                    <a href="index.php?controller=orders&action=delivery1&id=<?php echo $rows->id; ?>" class="label label-info">Đã nhận</a>
                                                 &nbsp;&nbsp;
-                                                <a href="index.php?controller=orders&action=detail&id=">Chi tiết</a>
+                                                <?php endif; ?>
+                                                <a href="index.php?controller=orders&action=detail&id=<?php echo $rows->id; ?>" class="label label-success">Chi tiết</a>
                                             </td>
+                                        <?php endforeach; ?>
                                     </tr>
                                 </table>
                             </div>
